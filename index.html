@@ -1,0 +1,571 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>DOUGH — The AI Meme Launchpad</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bagel+Fat+One&family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,800&family=DM+Sans:wght@400;500;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#FFF4E3;
+    --cream-2:#FFE9CB;
+    --pink:#FFB7C5;
+    --pink-deep:#FF7AA2;
+    --mint:#9BE7C4;
+    --mint-deep:#3FCB8E;
+    --lav:#C9B8FF;
+    --lav-deep:#7C5CFF;
+    --butter:#FFE082;
+    --butter-deep:#FFC23C;
+    --ink:#2A1B3D;
+    --ink-soft:#5B4775;
+  }
+  html,body{background:var(--cream);color:var(--ink);font-family:'DM Sans',sans-serif;}
+  .display{font-family:'Bagel Fat One',cursive;letter-spacing:-.02em;}
+  .serif{font-family:'Fraunces',serif;font-style:italic;}
+  .mono{font-family:'JetBrains Mono',monospace;}
+
+  /* CLAYMORPHISM CORE */
+  .clay{
+    background:var(--cream);
+    border-radius:32px;
+    box-shadow:
+      14px 14px 30px rgba(180,120,80,.18),
+      -10px -10px 28px rgba(255,255,255,.95),
+      inset 2px 2px 4px rgba(255,255,255,.6),
+      inset -3px -3px 6px rgba(180,120,80,.10);
+  }
+  .clay-pink{background:var(--pink);}
+  .clay-mint{background:var(--mint);}
+  .clay-lav {background:var(--lav);}
+  .clay-butter{background:var(--butter);}
+  .clay-ink {background:var(--ink);color:var(--cream);}
+  .clay-pink,.clay-mint,.clay-lav,.clay-butter,.clay-ink{
+    border-radius:32px;
+    box-shadow:
+      16px 16px 32px rgba(120,70,40,.22),
+      -8px -8px 22px rgba(255,255,255,.85),
+      inset 3px 3px 6px rgba(255,255,255,.55),
+      inset -4px -4px 8px rgba(120,60,30,.18);
+  }
+  .clay-inset{
+    background:var(--cream-2);
+    border-radius:28px;
+    box-shadow:
+      inset 8px 8px 18px rgba(180,120,80,.25),
+      inset -8px -8px 18px rgba(255,255,255,.9);
+  }
+  .clay-pill{
+    border-radius:999px;
+    box-shadow:
+      8px 8px 18px rgba(180,120,80,.22),
+      -6px -6px 14px rgba(255,255,255,.9),
+      inset 2px 2px 4px rgba(255,255,255,.6),
+      inset -2px -2px 4px rgba(120,60,30,.15);
+  }
+  .clay-btn{
+    border-radius:999px;
+    transition:transform .15s ease, box-shadow .15s ease;
+    box-shadow:
+      10px 10px 22px rgba(180,80,110,.35),
+      -6px -6px 16px rgba(255,255,255,.9),
+      inset 3px 3px 6px rgba(255,255,255,.55),
+      inset -3px -3px 6px rgba(120,30,60,.25);
+  }
+  .clay-btn:hover{transform:translate(-2px,-2px);}
+  .clay-btn:active{transform:translate(2px,2px);box-shadow:6px 6px 14px rgba(180,80,110,.3),inset 4px 4px 8px rgba(120,30,60,.3);}
+
+  /* dotted background grain */
+  body::before{
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+    background-image:radial-gradient(rgba(120,60,30,.06) 1px,transparent 1px);
+    background-size:22px 22px;
+  }
+
+  /* floating blobs */
+  @keyframes float1{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-18px) rotate(4deg)}}
+  @keyframes float2{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(14px) rotate(-6deg)}}
+  @keyframes float3{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-22px) rotate(5deg)}}
+  .float1{animation:float1 7s ease-in-out infinite}
+  .float2{animation:float2 9s ease-in-out infinite}
+  .float3{animation:float3 11s ease-in-out infinite}
+
+  @keyframes pulseRing{0%{transform:scale(.6);opacity:.7}100%{transform:scale(2.2);opacity:0}}
+  .ring{position:absolute;inset:0;border-radius:9999px;border:3px solid var(--pink-deep);animation:pulseRing 3s ease-out infinite;}
+  .ring:nth-child(2){animation-delay:1s;border-color:var(--lav-deep);}
+  .ring:nth-child(3){animation-delay:2s;border-color:var(--mint-deep);}
+
+  @keyframes sweep{0%{transform:rotate(0)}100%{transform:rotate(360deg)}}
+  .sweep{animation:sweep 6s linear infinite;transform-origin:center;}
+
+  @keyframes ticker{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+  .ticker{animation:ticker 40s linear infinite;}
+
+  .stroke-ink{-webkit-text-stroke:2px var(--ink);}
+  @media (max-width: 640px){
+    .clay,.clay-pink,.clay-mint,.clay-lav,.clay-butter,.clay-ink{border-radius:26px;}
+    .clay-inset{border-radius:22px;}
+  }
+  .underline-wave{background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 12'><path d='M0 6 Q 15 0 30 6 T 60 6 T 90 6 T 120 6' fill='none' stroke='%23FF7AA2' stroke-width='4' stroke-linecap='round'/></svg>");background-repeat:no-repeat;background-position:bottom left;background-size:100% .35em;padding-bottom:.15em;}
+
+  /* signal bar fills */
+  .bar{height:14px;border-radius:999px;background:var(--cream-2);box-shadow:inset 4px 4px 8px rgba(180,120,80,.3),inset -4px -4px 8px rgba(255,255,255,.9);overflow:hidden;}
+  .bar > span{display:block;height:100%;border-radius:999px;box-shadow:inset 2px 2px 4px rgba(255,255,255,.6),inset -2px -2px 4px rgba(0,0,0,.15);}
+</style>
+</head>
+<body class="overflow-x-hidden">
+
+<!-- decorative blobs -->
+<div class="pointer-events-none fixed -top-20 -left-24 w-[420px] h-[420px] rounded-full clay-pink float1 opacity-90"></div>
+<div class="pointer-events-none fixed top-[40%] -right-32 w-[380px] h-[380px] rounded-full clay-lav float2 opacity-90"></div>
+<div class="pointer-events-none fixed bottom-[-180px] left-[30%] w-[460px] h-[460px] rounded-full clay-mint float3 opacity-80"></div>
+
+<div class="relative z-10 max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-10 py-5 sm:py-6">
+
+<!-- NAV -->
+<header class="flex items-center justify-between gap-3 sm:gap-6">
+  <div class="flex items-center gap-3 min-w-0">
+    <div class="w-12 h-12 sm:w-14 sm:h-14 clay-pink grid place-items-center shrink-0" style="border-radius:20px;">
+      <span class="display text-2xl text-[var(--ink)]">D</span>
+    </div>
+    <div class="leading-none min-w-0">
+      <div class="display text-xl sm:text-2xl">DOUGH</div>
+      <div class="mono text-[9px] sm:text-[10px] text-[var(--ink-soft)] tracking-widest truncate">v0.4 · MEME LAUNCHPAD</div>
+    </div>
+  </div>
+  <nav class="hidden lg:flex items-center gap-2 clay-pill px-3 py-2 bg-[var(--cream)]">
+    <a class="px-4 py-2 rounded-full hover:bg-[var(--cream-2)]">Radar</a>
+    <a class="px-4 py-2 rounded-full hover:bg-[var(--cream-2)]">Bake</a>
+    <a class="px-4 py-2 rounded-full hover:bg-[var(--cream-2)]">Fair Launch</a>
+    <a class="px-4 py-2 rounded-full hover:bg-[var(--cream-2)]">Docs</a>
+  </nav>
+  <div class="flex items-center gap-2 sm:gap-3">
+    <div class="hidden md:block clay-pill px-4 py-3 bg-[var(--cream)] mono text-xs">◉ 12,408 online</div>
+    <button class="clay-btn clay-pink px-4 sm:px-6 py-3 text-sm sm:text-base font-bold whitespace-nowrap">Connect</button>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="mt-10 sm:mt-16 grid lg:grid-cols-12 gap-8 sm:gap-10 items-center">
+  <div class="lg:col-span-7">
+    <div class="clay-pill inline-flex items-center gap-2 px-3 sm:px-4 py-2 bg-[var(--cream)] mono text-[10px] sm:text-xs mb-6 max-w-full">
+      <span class="w-2 h-2 rounded-full bg-[var(--pink-deep)] animate-pulse shrink-0"></span>
+      <span class="truncate">LIVE · 1,204 signals scanned in the last 60s</span>
+    </div>
+    <h1 class="display text-[48px] sm:text-[78px] lg:text-[110px] leading-[.88]">
+      Bake the<br/>
+      <span class="underline-wave">internet's</span><br/>
+      next <span class="text-[var(--pink-deep)]">meme.</span>
+    </h1>
+    <p class="serif text-lg sm:text-2xl mt-6 sm:mt-8 max-w-xl text-[var(--ink-soft)]">
+      An AI launchpad that smells a meme three hours before Twitter does — then helps you mint, ship, and fair-launch it before the wave breaks.
+    </p>
+    <div class="mt-8 sm:mt-10 flex flex-wrap items-center gap-3 sm:gap-4">
+      <button class="clay-btn clay-pink px-6 sm:px-8 py-4 sm:py-5 text-base sm:text-lg font-bold flex items-center gap-3">
+        Start Baking
+        <span class="w-7 h-7 rounded-full bg-[var(--ink)] text-[var(--cream)] grid place-items-center">→</span>
+      </button>
+      <button class="clay-btn bg-[var(--cream)] px-6 sm:px-8 py-4 sm:py-5 text-base sm:text-lg font-bold">Watch Radar ↗</button>
+    </div>
+
+    <!-- stat row -->
+    <div class="mt-10 sm:mt-12 grid grid-cols-3 gap-3 sm:gap-4 max-w-2xl">
+      <div class="clay p-4 sm:p-5">
+        <div class="display text-2xl sm:text-3xl">42K</div>
+        <div class="mono text-[10px] text-[var(--ink-soft)] tracking-widest mt-1">MEMES MINTED</div>
+      </div>
+      <div class="clay p-4 sm:p-5">
+        <div class="display text-2xl sm:text-3xl">$31M</div>
+        <div class="mono text-[10px] text-[var(--ink-soft)] tracking-widest mt-1">VOL. THIS WEEK</div>
+      </div>
+      <div class="clay p-4 sm:p-5">
+        <div class="display text-2xl sm:text-3xl">3.2h</div>
+        <div class="mono text-[10px] text-[var(--ink-soft)] tracking-widest mt-1">AVG SIGNAL LEAD</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- HERO MASCOT -->
+  <div class="lg:col-span-5 relative h-[360px] sm:h-[480px] lg:h-[560px]">
+    <div class="absolute inset-0 grid place-items-center">
+      <div class="relative w-[280px] h-[280px] sm:w-[380px] sm:h-[380px] lg:w-[420px] lg:h-[420px]">
+        <!-- pulse rings -->
+        <div class="absolute inset-0 rounded-full"><div class="ring"></div><div class="ring"></div><div class="ring"></div></div>
+        <!-- big squishy clay disc -->
+        <div class="absolute inset-6 clay-butter grid place-items-center" style="border-radius:9999px;">
+          <div class="w-[78%] h-[78%] clay-pink grid place-items-center" style="border-radius:9999px;">
+            <!-- cute meme face -->
+            <svg viewBox="0 0 200 200" class="w-[78%]">
+              <defs>
+                <radialGradient id="eye" cx=".4" cy=".35" r=".7"><stop offset="0" stop-color="#fff"/><stop offset="1" stop-color="#FFE9CB"/></radialGradient>
+              </defs>
+              <circle cx="70" cy="85" r="22" fill="url(#eye)"/>
+              <circle cx="130" cy="85" r="22" fill="url(#eye)"/>
+              <circle cx="76" cy="92" r="9" fill="#2A1B3D"/>
+              <circle cx="136" cy="92" r="9" fill="#2A1B3D"/>
+              <circle cx="79" cy="89" r="3" fill="#fff"/>
+              <circle cx="139" cy="89" r="3" fill="#fff"/>
+              <path d="M60 130 Q100 170 140 130" fill="none" stroke="#2A1B3D" stroke-width="8" stroke-linecap="round"/>
+              <ellipse cx="40" cy="125" rx="14" ry="8" fill="#FF7AA2" opacity=".7"/>
+              <ellipse cx="160" cy="125" rx="14" ry="8" fill="#FF7AA2" opacity=".7"/>
+            </svg>
+          </div>
+        </div>
+        <!-- floating tickers -->
+        <div class="absolute -top-2 -left-6 clay-pill bg-[var(--cream)] px-4 py-2 mono text-xs float1">+482% velocity</div>
+        <div class="absolute top-10 -right-10 clay-pill clay-mint px-4 py-2 mono text-xs float2">5/5 platforms</div>
+        <div class="absolute -bottom-2 left-2 clay-pill clay-lav px-4 py-2 mono text-xs float3">meme-ability 94</div>
+        <div class="absolute bottom-12 -right-6 clay-pill bg-[var(--cream)] px-4 py-2 mono text-xs float1">$CAPYBARA detected</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LOGO TICKER -->
+<section class="mt-24">
+  <div class="clay-inset overflow-hidden py-6">
+    <div class="flex gap-16 ticker whitespace-nowrap mono text-sm text-[var(--ink-soft)]">
+      <template id="t"></template>
+      <span>𝕏 TWITTER</span><span>•</span><span>REDDIT</span><span>•</span><span>TIKTOK</span><span>•</span><span>GOOGLE TRENDS</span><span>•</span><span>HACKER NEWS</span><span>•</span><span>4CHAN /biz/</span><span>•</span><span>TELEGRAM</span><span>•</span><span>FARCASTER</span><span>•</span><span>NEWS API</span><span>•</span><span>YOUTUBE SHORTS</span><span>•</span>
+      <span>𝕏 TWITTER</span><span>•</span><span>REDDIT</span><span>•</span><span>TIKTOK</span><span>•</span><span>GOOGLE TRENDS</span><span>•</span><span>HACKER NEWS</span><span>•</span><span>4CHAN /biz/</span><span>•</span><span>TELEGRAM</span><span>•</span><span>FARCASTER</span><span>•</span><span>NEWS API</span><span>•</span><span>YOUTUBE SHORTS</span><span>•</span>
+    </div>
+  </div>
+</section>
+
+<!-- TREND RADAR — HERO FEATURE -->
+<section class="mt-24 sm:mt-32">
+  <div class="flex items-end justify-between flex-wrap gap-4 sm:gap-6 mb-8 sm:mb-10">
+    <div>
+      <div class="mono text-xs tracking-widest text-[var(--pink-deep)]">// FEATURE 01</div>
+      <h2 class="display text-5xl sm:text-7xl mt-3 leading-none">Trend Radar.</h2>
+      <p class="serif text-lg sm:text-2xl text-[var(--ink-soft)] mt-3 max-w-xl">24/7 signal scanning. The internet whispers — we hear it first.</p>
+    </div>
+    <div class="clay-pill bg-[var(--cream)] px-4 sm:px-5 py-2 sm:py-3 mono text-[10px] sm:text-xs">UPDATED 0.4s AGO</div>
+  </div>
+
+  <div class="grid lg:grid-cols-12 gap-6 sm:gap-8">
+
+    <!-- RADAR SCREEN -->
+    <div class="lg:col-span-7 clay-ink p-5 sm:p-8 relative overflow-hidden" style="border-radius:40px;">
+      <div class="flex items-center justify-between mb-6">
+        <div class="flex items-center gap-3">
+          <span class="w-3 h-3 rounded-full bg-[var(--pink-deep)]"></span>
+          <span class="w-3 h-3 rounded-full bg-[var(--butter-deep)]"></span>
+          <span class="w-3 h-3 rounded-full bg-[var(--mint-deep)]"></span>
+          <span class="mono text-xs text-[var(--cream-2)] ml-2">radar.dough.live</span>
+        </div>
+        <span class="mono text-xs text-[var(--mint)]">◉ SCANNING</span>
+      </div>
+
+      <div class="relative aspect-square max-w-[520px] mx-auto">
+        <!-- radar circles -->
+        <svg viewBox="0 0 400 400" class="absolute inset-0 w-full h-full">
+          <defs>
+            <radialGradient id="rg" cx=".5" cy=".5" r=".5">
+              <stop offset="0" stop-color="#7C5CFF" stop-opacity=".5"/>
+              <stop offset="1" stop-color="#7C5CFF" stop-opacity="0"/>
+            </radialGradient>
+          </defs>
+          <circle cx="200" cy="200" r="190" fill="url(#rg)"/>
+          <circle cx="200" cy="200" r="190" fill="none" stroke="#C9B8FF" stroke-opacity=".25"/>
+          <circle cx="200" cy="200" r="140" fill="none" stroke="#C9B8FF" stroke-opacity=".25"/>
+          <circle cx="200" cy="200" r="90"  fill="none" stroke="#C9B8FF" stroke-opacity=".25"/>
+          <circle cx="200" cy="200" r="40"  fill="none" stroke="#C9B8FF" stroke-opacity=".25"/>
+          <line x1="10" y1="200" x2="390" y2="200" stroke="#C9B8FF" stroke-opacity=".15"/>
+          <line x1="200" y1="10" x2="200" y2="390" stroke="#C9B8FF" stroke-opacity=".15"/>
+        </svg>
+        <!-- sweep arm -->
+        <svg viewBox="0 0 400 400" class="absolute inset-0 w-full h-full sweep">
+          <defs>
+            <linearGradient id="arm" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0" stop-color="#3FCB8E" stop-opacity="0"/>
+              <stop offset="1" stop-color="#3FCB8E" stop-opacity=".6"/>
+            </linearGradient>
+          </defs>
+          <path d="M200 200 L390 200 A190 190 0 0 0 290 36 Z" fill="url(#arm)"/>
+        </svg>
+        <!-- blips -->
+        <div class="absolute" style="top:22%;left:30%"><div class="w-4 h-4 rounded-full bg-[var(--pink-deep)] shadow-[0_0_24px_#FF7AA2]"></div><div class="mono text-[10px] text-[var(--cream-2)] mt-1">$CAPY</div></div>
+        <div class="absolute" style="top:55%;left:62%"><div class="w-3 h-3 rounded-full bg-[var(--butter-deep)] shadow-[0_0_24px_#FFC23C]"></div><div class="mono text-[10px] text-[var(--cream-2)] mt-1">$GLIZZY</div></div>
+        <div class="absolute" style="top:38%;left:48%"><div class="w-5 h-5 rounded-full bg-[var(--mint-deep)] shadow-[0_0_30px_#3FCB8E]"></div><div class="mono text-[10px] text-[var(--cream-2)] mt-1">$MOO</div></div>
+        <div class="absolute" style="top:70%;left:25%"><div class="w-2 h-2 rounded-full bg-[var(--lav-deep)] shadow-[0_0_18px_#7C5CFF]"></div><div class="mono text-[10px] text-[var(--cream-2)] mt-1">$DUCK</div></div>
+        <div class="absolute" style="top:18%;left:62%"><div class="w-3 h-3 rounded-full bg-[var(--pink-deep)] shadow-[0_0_24px_#FF7AA2]"></div><div class="mono text-[10px] text-[var(--cream-2)] mt-1">$BLEP</div></div>
+      </div>
+
+      <!-- bottom legend -->
+      <div class="hidden sm:flex justify-between mt-6 mono text-[10px] text-[var(--cream-2)] tracking-widest">
+        <span>NW · WHOLESOME</span>
+        <span>NE · CHAOTIC</span>
+        <span>SE · DEGENERATE</span>
+        <span>SW · NOSTALGIC</span>
+      </div>
+    </div>
+
+    <!-- SIGNAL CARDS -->
+    <div class="lg:col-span-5 flex flex-col gap-6">
+
+      <div class="clay-pink p-6">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <div class="w-12 h-12 rounded-2xl bg-[var(--cream)] grid place-items-center display text-2xl">🦫</div>
+            <div>
+              <div class="display text-2xl leading-none">$CAPYBARA</div>
+              <div class="mono text-[10px] tracking-widest">DETECTED 14m AGO</div>
+            </div>
+          </div>
+          <div class="clay-pill bg-[var(--cream)] px-3 py-1 mono text-xs">HOT</div>
+        </div>
+        <div class="mt-5 space-y-3">
+          <div>
+            <div class="flex justify-between mono text-[10px] mb-1"><span>VELOCITY</span><span>94 / 100</span></div>
+            <div class="bar"><span style="width:94%;background:var(--ink);"></span></div>
+          </div>
+          <div>
+            <div class="flex justify-between mono text-[10px] mb-1"><span>BREADTH</span><span>5 PLATFORMS</span></div>
+            <div class="bar"><span style="width:88%;background:var(--lav-deep);"></span></div>
+          </div>
+          <div>
+            <div class="flex justify-between mono text-[10px] mb-1"><span>MEME-ABILITY</span><span>97 / 100</span></div>
+            <div class="bar"><span style="width:97%;background:var(--mint-deep);"></span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="clay p-6">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <div class="w-12 h-12 rounded-2xl clay-mint grid place-items-center text-2xl">🌭</div>
+            <div>
+              <div class="display text-2xl leading-none">$GLIZZY</div>
+              <div class="mono text-[10px] tracking-widest text-[var(--ink-soft)]">DETECTED 1h AGO</div>
+            </div>
+          </div>
+          <div class="clay-pill bg-[var(--cream-2)] px-3 py-1 mono text-xs">RISING</div>
+        </div>
+        <div class="mt-5 space-y-3">
+          <div><div class="flex justify-between mono text-[10px] mb-1"><span>VELOCITY</span><span>71</span></div><div class="bar"><span style="width:71%;background:var(--pink-deep);"></span></div></div>
+          <div><div class="flex justify-between mono text-[10px] mb-1"><span>BREADTH</span><span>3 PLATFORMS</span></div><div class="bar"><span style="width:60%;background:var(--lav-deep);"></span></div></div>
+          <div><div class="flex justify-between mono text-[10px] mb-1"><span>MEME-ABILITY</span><span>82</span></div><div class="bar"><span style="width:82%;background:var(--mint-deep);"></span></div></div>
+        </div>
+      </div>
+
+      <div class="clay-lav p-6">
+        <div class="flex items-center gap-3">
+          <div class="w-12 h-12 rounded-2xl bg-[var(--cream)] grid place-items-center text-2xl">🐮</div>
+          <div>
+            <div class="display text-2xl leading-none">$MOO</div>
+            <div class="mono text-[10px] tracking-widest">EARLY · 4m AGO</div>
+          </div>
+          <button class="ml-auto clay-btn clay-pink px-4 py-2 text-sm font-bold">Bake →</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- HOW SCORING WORKS -->
+<section class="mt-24 sm:mt-32">
+  <div class="text-center max-w-2xl mx-auto px-2">
+    <div class="mono text-xs tracking-widest text-[var(--pink-deep)]">// THE THREE SCORES</div>
+    <h2 class="display text-4xl sm:text-6xl mt-3 leading-none">Every signal, scored three ways.</h2>
+  </div>
+
+  <div class="grid md:grid-cols-3 gap-6 sm:gap-8 mt-12 sm:mt-14">
+    <div class="clay p-8 relative">
+      <div class="absolute -top-6 -right-4 w-20 h-20 clay-pink rounded-full grid place-items-center display text-3xl">01</div>
+      <div class="w-16 h-16 clay-pink grid place-items-center mb-6" style="border-radius:24px;">
+        <svg viewBox="0 0 24 24" class="w-8 h-8" fill="none" stroke="#2A1B3D" stroke-width="2.5" stroke-linecap="round"><path d="M3 17L9 11L13 15L21 7"/><path d="M14 7H21V14"/></svg>
+      </div>
+      <div class="display text-3xl">Velocity</div>
+      <p class="serif text-lg text-[var(--ink-soft)] mt-2">How fast it's growing. Mentions per minute, derivative of derivative — we measure the curve, not the count.</p>
+      <div class="mt-6 bar"><span style="width:88%;background:var(--pink-deep);"></span></div>
+    </div>
+
+    <div class="clay p-8 relative md:translate-y-8">
+      <div class="absolute -top-6 -right-4 w-20 h-20 clay-mint rounded-full grid place-items-center display text-3xl">02</div>
+      <div class="w-16 h-16 clay-mint grid place-items-center mb-6" style="border-radius:24px;">
+        <svg viewBox="0 0 24 24" class="w-8 h-8" fill="none" stroke="#2A1B3D" stroke-width="2.5"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg>
+      </div>
+      <div class="display text-3xl">Breadth</div>
+      <p class="serif text-lg text-[var(--ink-soft)] mt-2">How many platforms it's spreading across. A meme on one app is a joke. On five, it's a movement.</p>
+      <div class="mt-6 flex gap-2">
+        <span class="w-8 h-8 rounded-full clay-pink"></span>
+        <span class="w-8 h-8 rounded-full clay-lav"></span>
+        <span class="w-8 h-8 rounded-full clay-butter"></span>
+        <span class="w-8 h-8 rounded-full clay-mint"></span>
+        <span class="w-8 h-8 rounded-full bg-[var(--cream-2)]"></span>
+      </div>
+    </div>
+
+    <div class="clay p-8 relative">
+      <div class="absolute -top-6 -right-4 w-20 h-20 clay-lav rounded-full grid place-items-center display text-3xl">03</div>
+      <div class="w-16 h-16 clay-lav grid place-items-center mb-6" style="border-radius:24px;">
+        <svg viewBox="0 0 24 24" class="w-8 h-8" fill="none" stroke="#2A1B3D" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l2.5 6 6.5.5-5 4.5 1.5 6.5L12 16l-5.5 3.5L8 13 3 8.5 9.5 8z"/></svg>
+      </div>
+      <div class="display text-3xl">Meme-ability</div>
+      <p class="serif text-lg text-[var(--ink-soft)] mt-2">Can this become a coin? An ML model trained on 200k past meme launches scores narrative stickiness, image-friendliness, and ticker-vibes.</p>
+      <div class="mt-6 flex items-center gap-2 mono text-xs"><span class="text-[var(--lav-deep)] text-2xl">★★★★★</span><span class="text-[var(--ink-soft)]">/ trained on 200k launches</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- DATA SOURCES -->
+<section class="mt-24 sm:mt-32 grid lg:grid-cols-12 gap-8 sm:gap-10 items-center">
+  <div class="lg:col-span-5">
+    <div class="mono text-xs tracking-widest text-[var(--pink-deep)]">// THE INPUT LAYER</div>
+    <h2 class="display text-4xl sm:text-6xl mt-3 leading-none">We listen to <span class="text-[var(--pink-deep)]">everywhere</span> at once.</h2>
+    <p class="serif text-lg sm:text-xl text-[var(--ink-soft)] mt-5">Ten ingestion pipelines, 4M posts a day, all flowing into one squishy little brain.</p>
+    <button class="clay-btn clay-butter px-6 py-4 mt-8 font-bold">See live firehose →</button>
+  </div>
+  <div class="lg:col-span-7 grid grid-cols-2 sm:grid-cols-3 gap-4 sm:gap-5">
+    <div class="clay-pink p-5"><div class="display text-xl">𝕏 Twitter</div><div class="mono text-[10px] mt-1">2.1M posts/day</div></div>
+    <div class="clay p-5"><div class="display text-xl">Reddit</div><div class="mono text-[10px] mt-1 text-[var(--ink-soft)]">840k posts/day</div></div>
+    <div class="clay-mint p-5"><div class="display text-xl">TikTok</div><div class="mono text-[10px] mt-1">410k clips/day</div></div>
+    <div class="clay-lav p-5"><div class="display text-xl">Trends</div><div class="mono text-[10px] mt-1">9k queries/m</div></div>
+    <div class="clay-butter p-5"><div class="display text-xl">News API</div><div class="mono text-[10px] mt-1">3.4k stories/h</div></div>
+    <div class="clay p-5"><div class="display text-xl">Farcaster</div><div class="mono text-[10px] mt-1 text-[var(--ink-soft)]">120k casts/day</div></div>
+    <div class="clay p-5"><div class="display text-xl">HN</div><div class="mono text-[10px] mt-1 text-[var(--ink-soft)]">1.2k posts/day</div></div>
+    <div class="clay-pink p-5"><div class="display text-xl">Telegram</div><div class="mono text-[10px] mt-1">600k msgs/day</div></div>
+    <div class="clay-mint p-5"><div class="display text-xl">YT Shorts</div><div class="mono text-[10px] mt-1">270k clips/day</div></div>
+  </div>
+</section>
+
+<!-- AUTONOMOUS LAUNCH -->
+<section class="mt-24 sm:mt-32 grid lg:grid-cols-12 gap-8 items-center">
+  <div class="lg:col-span-6 order-2 lg:order-1">
+    <div class="clay-ink p-6 sm:p-10 relative overflow-hidden" style="border-radius:40px;">
+      <div class="flex items-center justify-between mb-6">
+        <span class="mono text-[10px] sm:text-xs text-[var(--mint)]">◉ AUTONOMOUS MODE · ENGAGED</span>
+        <span class="mono text-[10px] text-[var(--cream-2)]">no human in loop</span>
+      </div>
+      <div class="space-y-3">
+        <div class="clay-pill bg-[var(--cream)] text-[var(--ink)] px-4 py-3 mono text-[11px] sm:text-xs flex justify-between"><span>14:02:11 · signal $CAPYBARA detected</span><span class="text-[var(--pink-deep)]">v 71</span></div>
+        <div class="clay-pill bg-[var(--cream)] text-[var(--ink)] px-4 py-3 mono text-[11px] sm:text-xs flex justify-between"><span>14:09:44 · breadth → 4 platforms</span><span class="text-[var(--lav-deep)]">b 80</span></div>
+        <div class="clay-pill bg-[var(--cream)] text-[var(--ink)] px-4 py-3 mono text-[11px] sm:text-xs flex justify-between"><span>14:13:02 · velocity threshold crossed</span><span class="text-[var(--pink-deep)]">v 94</span></div>
+        <div class="clay-pill clay-mint px-4 py-3 mono text-[11px] sm:text-xs flex justify-between"><span>14:13:03 · 🤖 AUTO-LAUNCH FIRED</span><span>$CAPY live</span></div>
+        <div class="clay-pill clay-pink px-4 py-3 mono text-[11px] sm:text-xs flex justify-between"><span>14:13:18 · LP seeded · curve open</span><span>+12 buys</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="lg:col-span-6 order-1 lg:order-2">
+    <div class="mono text-xs tracking-widest text-[var(--pink-deep)]">// FEATURE 02 · NO HUMANS REQUIRED</div>
+    <h2 class="display text-4xl sm:text-6xl mt-3 leading-none">It launches <span class="text-[var(--pink-deep)]">itself.</span></h2>
+    <p class="serif text-lg sm:text-2xl text-[var(--ink-soft)] mt-5">When a signal crosses the virality threshold — velocity, breadth, and meme-ability all firing — Dough mints, deploys, and seeds liquidity on its own. No clicks. No team. No delay.</p>
+    <div class="grid grid-cols-3 gap-3 sm:gap-4 mt-8">
+      <div class="clay p-4"><div class="display text-2xl sm:text-3xl">0</div><div class="mono text-[10px] mt-1 text-[var(--ink-soft)]">HUMANS NEEDED</div></div>
+      <div class="clay p-4"><div class="display text-2xl sm:text-3xl">11s</div><div class="mono text-[10px] mt-1 text-[var(--ink-soft)]">DETECT → LIVE</div></div>
+      <div class="clay p-4"><div class="display text-2xl sm:text-3xl">24/7</div><div class="mono text-[10px] mt-1 text-[var(--ink-soft)]">ALWAYS ON</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- AGENT LAUNCHPAD -->
+<section class="mt-24 sm:mt-32">
+  <div class="text-center max-w-2xl mx-auto px-2">
+    <div class="mono text-xs tracking-widest text-[var(--pink-deep)]">// FEATURE 03 · OPEN OVEN</div>
+    <h2 class="display text-4xl sm:text-6xl mt-3 leading-none">A launchpad for <span class="text-[var(--pink-deep)]">other agents.</span></h2>
+    <p class="serif text-lg sm:text-2xl text-[var(--ink-soft)] mt-4">Bring your own AI. Plug it into Dough's rails and let it launch its own tokens — fair curve, auto LP, on-chain from minute one.</p>
+  </div>
+
+  <div class="mt-12 grid md:grid-cols-3 gap-6">
+    <div class="clay-pink p-6">
+      <div class="flex items-center gap-3">
+        <div class="w-12 h-12 rounded-2xl bg-[var(--cream)] grid place-items-center text-2xl">🤖</div>
+        <div><div class="display text-xl leading-none">@frogGPT</div><div class="mono text-[10px] mt-1">12 tokens launched</div></div>
+      </div>
+      <div class="serif italic text-base mt-4">"specializes in amphibian-coded narratives"</div>
+      <div class="mt-5 flex items-center justify-between"><div class="clay-pill bg-[var(--cream)] px-3 py-1 mono text-[10px]">$2.4M TVL</div><span class="mono text-xs">▲ 184%</span></div>
+    </div>
+    <div class="clay-mint p-6">
+      <div class="flex items-center gap-3">
+        <div class="w-12 h-12 rounded-2xl bg-[var(--cream)] grid place-items-center text-2xl">🧠</div>
+        <div><div class="display text-xl leading-none">@oracle.eth</div><div class="mono text-[10px] mt-1">31 tokens launched</div></div>
+      </div>
+      <div class="serif italic text-base mt-4">"trained on every rugpull since 2020"</div>
+      <div class="mt-5 flex items-center justify-between"><div class="clay-pill bg-[var(--cream)] px-3 py-1 mono text-[10px]">$8.1M TVL</div><span class="mono text-xs">▲ 92%</span></div>
+    </div>
+    <div class="clay-lav p-6">
+      <div class="flex items-center gap-3">
+        <div class="w-12 h-12 rounded-2xl bg-[var(--cream)] grid place-items-center text-2xl">🌀</div>
+        <div><div class="display text-xl leading-none">@hivemind</div><div class="mono text-[10px] mt-1">7 tokens launched</div></div>
+      </div>
+      <div class="serif italic text-base mt-4">"swarm of 400 micro-agents voting on memes"</div>
+      <div class="mt-5 flex items-center justify-between"><div class="clay-pill bg-[var(--cream)] px-3 py-1 mono text-[10px]">$1.1M TVL</div><span class="mono text-xs">▲ 41%</span></div>
+    </div>
+  </div>
+
+  <div class="mt-10 clay p-6 sm:p-8 flex flex-wrap items-center justify-between gap-4">
+    <div>
+      <div class="display text-2xl sm:text-3xl">Got an agent? Plug it in.</div>
+      <div class="serif text-base sm:text-lg text-[var(--ink-soft)] mt-1">One SDK, one webhook, instant launch rails.</div>
+    </div>
+    <button class="clay-btn clay-pink px-6 py-4 font-bold">Read the Agent SDK →</button>
+  </div>
+</section>
+
+<!-- TESTIMONIAL -->
+<section class="mt-24 sm:mt-32 clay-butter p-6 sm:p-10 lg:p-16 grid lg:grid-cols-12 gap-8 sm:gap-10 items-center" style="border-radius:40px;">
+  <div class="lg:col-span-8">
+    <div class="serif text-2xl sm:text-3xl lg:text-5xl leading-tight">"I was on the radar four hours before the meme hit Twitter trending. Baked the token in nine minutes. Did 40x by dinner. <span class="text-[var(--pink-deep)]">Dough is unfair.</span>"</div>
+    <div class="mt-8 flex items-center gap-4">
+      <div class="w-14 h-14 clay-pink rounded-full"></div>
+      <div>
+        <div class="display text-xl">@frogmaxxing</div>
+        <div class="mono text-xs text-[var(--ink-soft)]">degen since blocks</div>
+      </div>
+    </div>
+  </div>
+  <div class="lg:col-span-4 grid grid-cols-2 gap-4">
+    <div class="clay p-5 text-center"><div class="display text-4xl">40x</div><div class="mono text-[10px]">DAY ONE</div></div>
+    <div class="clay p-5 text-center"><div class="display text-4xl">9m</div><div class="mono text-[10px]">TO LAUNCH</div></div>
+    <div class="clay p-5 text-center col-span-2"><div class="display text-4xl">4h</div><div class="mono text-[10px]">EARLIER THAN TWITTER</div></div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="mt-24 sm:mt-32 mb-16 sm:mb-20 text-center relative px-2">
+  <div class="absolute left-1/2 -translate-x-1/2 -top-10 w-20 h-20 sm:w-24 sm:h-24 clay-pink rounded-full float1"></div>
+  <h2 class="display text-5xl sm:text-7xl lg:text-8xl leading-[.9]">It bakes itself.<br/><span class="text-[var(--pink-deep)]">You just watch.</span></h2>
+  <p class="serif text-lg sm:text-2xl text-[var(--ink-soft)] mt-6">The radar's already running. The oven's already hot.</p>
+  <div class="mt-8 sm:mt-10 flex flex-wrap gap-3 sm:gap-4 justify-center">
+    <button class="clay-btn clay-pink px-6 sm:px-10 py-5 sm:py-6 text-base sm:text-xl font-bold">Open the Radar →</button>
+    <button class="clay-btn bg-[var(--cream)] px-6 sm:px-10 py-5 sm:py-6 text-base sm:text-xl font-bold">Agent SDK</button>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="clay p-6 sm:p-10 mb-10" style="border-radius:32px;">
+  <div class="grid sm:grid-cols-2 md:grid-cols-4 gap-8">
+    <div>
+      <div class="display text-3xl">DOUGH</div>
+      <p class="serif text-sm text-[var(--ink-soft)] mt-2">The AI meme launchpad. Half oven, half oracle.</p>
+    </div>
+    <div>
+      <div class="mono text-xs tracking-widest text-[var(--ink-soft)] mb-3">PRODUCT</div>
+      <ul class="space-y-2"><li>Trend Radar</li><li>Bake Studio</li><li>Fair Launch</li><li>Auto LP</li></ul>
+    </div>
+    <div>
+      <div class="mono text-xs tracking-widest text-[var(--ink-soft)] mb-3">COMPANY</div>
+      <ul class="space-y-2"><li>Manifesto</li><li>Docs</li><li>Brand</li><li>Careers</li></ul>
+    </div>
+    <div>
+      <div class="mono text-xs tracking-widest text-[var(--ink-soft)] mb-3">JOIN THE OVEN</div>
+      <div class="clay-inset flex items-center p-2">
+        <input class="bg-transparent flex-1 px-3 py-2 outline-none mono text-xs" placeholder="you@meme.lol"/>
+        <button class="clay-btn clay-pink px-4 py-2 text-xs font-bold">Join</button>
+      </div>
+    </div>
+  </div>
+  <div class="mt-10 pt-6 border-t border-[var(--cream-2)] flex flex-col sm:flex-row gap-2 justify-between mono text-[10px] tracking-widest text-[var(--ink-soft)]">
+    <span>© 2026 DOUGH LABS · BAKED ON-CHAIN</span>
+    <span>NOT FINANCIAL ADVICE · DEFINITELY MEME ADVICE</span>
+  </div>
+</footer>
+
+</div>
+</body>
+</html>
